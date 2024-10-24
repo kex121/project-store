@@ -1,9 +1,11 @@
 import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "./NavBar.css";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
-function NavBar({ user }) {
+function NavBar({ user, logoutHandler }) {
+  const navigate = useNavigate();
+
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
@@ -20,6 +22,7 @@ function NavBar({ user }) {
                   Каталог
                 </Link>
                 <ul className="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
+                <li><Link className="dropdown-item text-white" to="/catalog">Весь каталог</Link></li>
                   <li><Link className="dropdown-item text-white" to="#">Кофе для эспрессо</Link></li>
                   <li><Link className="dropdown-item text-white" to="#">Кофе для фильтра</Link></li>
                   <li><Link className="dropdown-item text-white" to="#">Аксессуары</Link></li>
@@ -36,6 +39,11 @@ function NavBar({ user }) {
             <ul className="navbar-nav ms-auto">
             {user ? (
               <>
+              <li className="nav-item">
+                    <span className="nav-link" >
+                      Привет, {user.name}
+                    </span>
+                  </li>
               <li className="nav-item dropdown">
                 <Link
                   className="nav-link dropdown-toggle"
@@ -64,7 +72,8 @@ function NavBar({ user }) {
                     <hr className="dropdown-divider" />
                   </li>
                   <li>
-                    <Link className="dropdown-item" to="/logout">
+                    <Link className="dropdown-item" to="/logout"
+                    onClick={() => logoutHandler().then(() => navigate('/login'))}>
                       Выйти
                     </Link>
                     
@@ -73,12 +82,14 @@ function NavBar({ user }) {
                 </ul>
                 
               </li>
-              <img
-                    src={'user.png'}
+              <Link to="/profile">
+              <img 
+                    src={'profile.png'}
                     alt="Аватар"
                     className="rounded-circle"
                     style={{ width: '40px', height: '40px' }}
                   />
+                  </Link>
               </>
             ) : (
               <>

@@ -7,9 +7,6 @@ import SignupPage from './components/pages/SignupPage';
 import axiosInstance, { setAccessToken } from './services/axiosInstance';
 import ProtectedRoute from "./components/HOC/ProtectedRoute";
 import LoginPage from './components/pages/LoginPage';
-import axios from 'axios';
-
-
 
 function App() {
   const [user, setUser] = useState();
@@ -38,15 +35,12 @@ function App() {
       [name]: value,
     }));
   };
-  console.log(formData)
+
   const signupHandler = async (e, formData) => {
     e.preventDefault();
-
     try {
-      const response = await axiosInstance.post('/auth/signup', formData);
-      if (response.data.redirectPath) {
-        window.location.href = response.data.redirectPath;
-      }
+      return await axiosInstance.post('/auth/signup', formData);
+      // return response;
     } catch (error) {
       if (error.response) {
         alert(error.response.data.text);
@@ -56,10 +50,8 @@ function App() {
 
   const loginHandler = async (e, formData) => {
     e.preventDefault();
-    console.log('!!!!', formData)
     try {
     const response = await axiosInstance.post('/auth/login', formData);
-    console.log('res',response)
     setUser(response.data.user);
     setAccessToken(response.data.accessToken);}
     catch(error) {
@@ -67,10 +59,16 @@ function App() {
     }
   };
 
+  const logoutHandler = async () => {
+    await axiosInstance.get('/auth/logout');
+    setUser(null);
+    setAccessToken('');
+  };
+
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Root user={user}/>,
+      element: <Root user={user} logoutHandler={logoutHandler}/>,
       errorElement: <ErrorPage />,
       children: [
         {
@@ -82,11 +80,11 @@ function App() {
           children: [
             {
               path: '/signup',
-              element: <SignupPage signupHandler={signupHandler} />,
+              element: <SignupPage signupHandler={signupHandler} setFormData={setFormData} formData={formData} handleChange={handleChange}/>,
             },
             {
               path: '/login',
-              element: <LoginPage loginHandler={loginHandler} setFormData={setFormData} formData={formData} handleChange={handleChange} />,
+              element: <LoginPage loginHandler={loginHandler} formData={formData} handleChange={handleChange} />,
             },
           ],
         },
@@ -94,7 +92,7 @@ function App() {
     },
   ]);
 
-  // if (user === undefined) return <h1>Loading...</h1>;
+  if (user === undefined) return <h1>Loading...</h1>;
 
   return <RouterProvider router={router} />;
 }

@@ -9,27 +9,31 @@ authRouter.post('/signup', async (req, res) => {
 
   try {
     const hashpass = await bcrypt.hash(pass, 10);
+    const isAdmin = null;
     const [newUser, created] = await User.findOrCreate({
       where: { email },
       defaults: { name, pass: hashpass, isAdmin },
     });
 
     if (!created) {
-      return res
-        .status(400)
-        .json({ text: 'Пользователь с этим email уже существует' });
+      return (
+        res
+          // .status(400)
+          .json({ text: 'Пользователь с этим email уже существует' })
+      );
     }
 
     const user = newUser.get();
     delete user.hashpass;
-    const { refreshToken, accessToken } = generateTokens({ user });
+    const { refreshToken, accessToken } = generateToken({ user });
 
     // return res.status(201).json({ text: 'Регистрация успешна', redirectPath: '/' });
     res
       .status(200)
       .cookie('refreshToken', refreshToken, cookieConfig)
-      .json({ user, accessToken });
+      .json({ user, accessToken, redirectPath: '/' });
   } catch (error) {
+    console.log(error);
     return res
       .status(500)
       .json({ text: 'Ошибка сервера, попробуйте позже', error: error.message });
@@ -39,7 +43,8 @@ authRouter.post('/signup', async (req, res) => {
 authRouter.post('/login', async (req, res) => {
   const { email, pass } = req.body;
   try {
-    const targetUser = await User.findOne({ where: { email } }); 
+    const targetUser = await User.findOne({ where: { email } });
+
     if (!targetUser) {
       return res.status(400).json({ text: 'Неверный email' });
     }
@@ -48,7 +53,7 @@ authRouter.post('/login', async (req, res) => {
     if (!isValid) {
       return res.status(400).json({ text: 'Неверный пароль' });
     }
-   
+
     const user = targetUser.get();
     delete user.pass;
     const { refreshToken, accessToken } = generateToken({ user });
@@ -62,8 +67,8 @@ authRouter.post('/login', async (req, res) => {
   }
 });
 
-// authRouter.get('/logout', (req, res) => {
-//   res.clearCookie('refreshToken').status(200).send('Logout successfull!');
-// });
+authRouter.get('/logout', (req, res) => {
+  res.clearCookie('refreshToken').status(200).send('Logout success');
+});
 
 module.exports = authRouter;

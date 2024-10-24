@@ -17,7 +17,7 @@ module.exports = {
         {
           name: 'Timur Sobolev',
           email: 'timur@sobolev',
-          pass: '123',
+          pass: hashSync('123', 10),
           isAdmin: true,
           createdAt: new Date(),
           updatedAt: new Date(),
@@ -25,14 +25,14 @@ module.exports = {
         {
           name: 'Vasya Pupkin',
           email: 'vasya@mail.ru',
-          pass: '123',
+          pass: hashSync('123', 10),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           name: 'Aboba',
           email: 'aboba@mail',
-          pass: '123',
+          pass: hashSync('123', 10),
           createdAt: new Date(),
           updatedAt: new Date(),
         },
