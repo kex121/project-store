@@ -8,23 +8,36 @@ module.exports = {
       [
         {
           userId: 1,
-          productId: 2,
+          productId: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
           userId: 1,
-          productId: 4,
+          productId: 2,
           createdAt: new Date(),
           updatedAt: new Date(),
         },
 
         {
           userId: 1,
-          productId: 5,
+          productId: 2,
           createdAt: new Date(),
           updatedAt: new Date(),
-        },{
+        },
+        {
+          userId: 3,
+          productId: 1,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
+          userId: 3,
+          productId: 4,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+        },
+        {
           userId: 3,
           productId: 1,
           createdAt: new Date(),
@@ -38,19 +51,7 @@ module.exports = {
         },
         {
           userId: 3,
-          productId: 3,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: 3,
-          productId: 4,
-          createdAt: new Date(),
-          updatedAt: new Date(),
-        },
-        {
-          userId: 3,
-          productId: 5,
+          productId: 1,
           createdAt: new Date(),
           updatedAt: new Date(),
         },

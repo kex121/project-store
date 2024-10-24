@@ -7,17 +7,17 @@ module.exports = {
       'Categories',
       [
         {
-          name: 'Футболки',
+          name: 'Кофе для эспрессо',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Поло',
+          name: 'Кофе для фильтра',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
         {
-          name: 'Брюки',
+          name: 'Аксессуары',
           createdAt: new Date(),
           updatedAt: new Date(),
         },

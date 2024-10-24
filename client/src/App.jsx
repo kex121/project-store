@@ -1,27 +1,25 @@
-import { useState } from 'react'
+// import { useState } from 'react'
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import Root from './components/ui/Root';
+import MainPage from './components/pages/MainPage';
+import ErrorPage from './components/pages/ErrorPage';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const router = createBrowserRouter([
+    {
+      path: '/',
+      element: <Root />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          path: '/',
+          element: <MainPage />,
+        },
+      ],
+    },
+  ]);
 
-  return (
-    <>
-      <div>
-       
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+  return <RouterProvider router={router} />;
 }
 
-export default App
+export default App;
