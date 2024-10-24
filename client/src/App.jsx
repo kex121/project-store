@@ -70,7 +70,7 @@ function App() {
   const router = createBrowserRouter([
     {
       path: '/',
-      element: <Root />,
+      element: <Root user={user}/>,
       errorElement: <ErrorPage />,
       children: [
         {

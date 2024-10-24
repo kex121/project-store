@@ -31,8 +31,8 @@ axiosInstance.interceptors.response.use(
         return axiosInstance(prevRequest);
       }
       // return Promise.reject(error);
-    } catch (error) {
-      console.error(error);
+    } catch (err) {
+      console.error(err);
     }
   },
 );

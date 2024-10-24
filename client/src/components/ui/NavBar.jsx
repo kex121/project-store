@@ -2,9 +2,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import "./NavBar.css";
 import { Link } from 'react-router-dom';
-import { Button } from 'bootstrap/dist/js/bootstrap.bundle.min.js';
 
-function NavBar() {
+function NavBar({ user }) {
   return (
     <>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark p-3">
@@ -21,9 +20,9 @@ function NavBar() {
                   Каталог
                 </Link>
                 <ul className="dropdown-menu bg-dark" aria-labelledby="navbarDropdownMenuLink">
-                  <li><Link className="dropdown-item text-white" to="#">Категория 1</Link></li>
-                  <li><Link className="dropdown-item text-white" to="#">Категория 2</Link></li>
-                  <li><Link className="dropdown-item text-white" to="#">Категория 3</Link></li>
+                  <li><Link className="dropdown-item text-white" to="#">Кофе для эспрессо</Link></li>
+                  <li><Link className="dropdown-item text-white" to="#">Кофе для фильтра</Link></li>
+                  <li><Link className="dropdown-item text-white" to="#">Аксессуары</Link></li>
                 </ul>
               </li>
               <li className="nav-item">
@@ -35,13 +34,63 @@ function NavBar() {
             </ul>
 
             <ul className="navbar-nav ms-auto">
-              <li className="nav-item">
-                <Link className="nav-link mx-2" to="/login">Вход</Link>
+            {user ? (
+              <>
+              <li className="nav-item dropdown">
+                <Link
+                  className="nav-link dropdown-toggle"
+                  to="#"
+                  id="userDropdown"
+                  role="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                  style={{ paddingRight: '5px' }}
+                >
+                  Мой Профиль
+                </Link>
+                
+                <ul className="dropdown-menu" aria-labelledby="userDropdown">
+                  <li>
+                    <Link className="dropdown-item" to="/profile">
+                      Профиль
+                    </Link>
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/settings">
+                      Настройки аккаунта
+                    </Link>
+                  </li>
+                  <li>
+                    <hr className="dropdown-divider" />
+                  </li>
+                  <li>
+                    <Link className="dropdown-item" to="/logout">
+                      Выйти
+                    </Link>
+                    
+                  </li>
+                  
+                </ul>
+                
               </li>
-              <li className="nav-item">
-                <Link className="nav-link mx-2" to="/signup">Регистрация</Link>
-              </li>
-            </ul>
+              <img
+                    src={'user.png'}
+                    alt="Аватар"
+                    className="rounded-circle"
+                    style={{ width: '40px', height: '40px' }}
+                  />
+              </>
+            ) : (
+              <>
+                <li className="nav-item">
+                  <Link className="nav-link mx-2" to="/login">Вход</Link>
+                </li>
+                <li className="nav-item">
+                  <Link className="nav-link mx-2" to="/signup">Регистрация</Link>
+                </li>
+              </>
+            )}
+          </ul>
           </div>
         </div>
       </nav>

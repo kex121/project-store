@@ -11,11 +11,9 @@ tokensRouter.get('/refresh', verifyRefreshToken, (req, res) => {
   const { accessToken, refreshToken } = generateToken({ user });
 
   res
-    .cookie('token', refreshToken, cookieConfig)
+    .status(200)
+    .cookie('refreshToken', refreshToken, cookieConfig)
     .json({ user, accessToken });
-
-  console.error(error);
-  res.sendStatus(400);
 });
 
 module.exports = tokensRouter;
