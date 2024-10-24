@@ -8,7 +8,7 @@ const verifyRefreshToken = (req, res, next) => {
     next();
   } catch (error) {
     console.log('Invalid refresh token');
-    res.sendStatus(401);
+    res.status(401).clearCookie('refreshToken').json({ text: 'Invalid refresh token' });
   }
 };
 

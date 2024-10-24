@@ -1,80 +1,69 @@
-const router = require('express').Router();
+const authRouter = require('express').Router();
 const { User } = require('../../db/models');
 const bcrypt = require('bcrypt');
 const generateToken = require('../utils/generateToken');
 const cookieConfig = require('../configs/cookieConfig');
 
-router.post('/signup', async (req, res) => {
-  const { username, email, password } = req.body;
+authRouter.post('/signup', async (req, res) => {
+  const { email, name, pass } = req.body;
 
   try {
-    const [user, isCreated] = await User.findOrCreate({
-      where: {
-        email,
-      },
-      defaults: {
-        username,
-        email,
-        password: await bcrypt.hash(password, 10),
-      },
+    const hashpass = await bcrypt.hash(pass, 10);
+    const [newUser, created] = await User.findOrCreate({
+      where: { email },
+      defaults: { name, pass: hashpass, isAdmin },
     });
 
-    if (!isCreated) {
-      res.status(400).json({ message: 'User alredy exist' });
-    } else {
-      const plainUser = user.get();
-      delete plainUser.password;
-
-      const { accessToken, refreshToken } = generateToken({ user: plainUser });
-
-      res
-        .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-        .json({ user: plainUser, accessToken });
+    if (!created) {
+      return res
+        .status(400)
+        .json({ text: 'Пользователь с этим email уже существует' });
     }
-  } catch (error) {
-    console.error(error);
-    res.sendStatus(400);
-  }
-});
 
-router.post('/signin', async (req, res) => {
-  const { email, password } = req.body;
+    const user = newUser.get();
+    delete user.hashpass;
+    const { refreshToken, accessToken } = generateTokens({ user });
 
-  if (!(email && password)) {
-    res.status(400).json({ message: 'All fields are required' });
-  }
-
-  const user = await User.findOne({ where: { email } });
-
-  const isCorrectPassword = await bcrypt.compare(password, user.password);
-
-  if (!isCorrectPassword) {
-    res.status(401).json({ message: 'Incorrect email or password' });
-  } else {
-    const plainUser = user.get();
-    delete plainUser.password;
-
-    const { accessToken, refreshToken } = generateToken({ user: plainUser });
-
+    // return res.status(201).json({ text: 'Регистрация успешна', redirectPath: '/' });
     res
-      .cookie('refreshToken', refreshToken, cookieConfig.refresh)
-      .json({ user: plainUser, accessToken });
-  }
-
-  try {
+      .status(200)
+      .cookie('refreshToken', refreshToken, cookieConfig)
+      .json({ user, accessToken });
   } catch (error) {
-    console.error(error);
-    res.sendStatus(400);
+    return res
+      .status(500)
+      .json({ text: 'Ошибка сервера, попробуйте позже', error: error.message });
   }
 });
 
-router.get('/logout', (req, res) => {
+authRouter.post('/login', async (req, res) => {
+  const { email, pass } = req.body;
   try {
-    res.clearCookie('refreshToken').sendStatus(200);
+    const targetUser = await User.findOne({ where: { email } }); 
+    if (!targetUser) {
+      return res.status(400).json({ text: 'Неверный email' });
+    }
+
+    const isValid = await bcrypt.compare(pass, targetUser.pass);
+    if (!isValid) {
+      return res.status(400).json({ text: 'Неверный пароль' });
+    }
+   
+    const user = targetUser.get();
+    delete user.pass;
+    const { refreshToken, accessToken } = generateToken({ user });
+    res
+      .status(200)
+      .cookie('refreshToken', refreshToken, cookieConfig)
+      .json({ user, accessToken });
   } catch (error) {
     console.error(error);
-    res.sendStatus(400);
+    res.status(403).send(error.message);
   }
 });
 
-module.exports = router;
+// authRouter.get('/logout', (req, res) => {
+//   res.clearCookie('refreshToken').status(200).send('Logout successfull!');
+// });
+
+module.exports = authRouter;

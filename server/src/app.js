@@ -7,7 +7,8 @@ const cors = require('cors');
 
 const { PORT } = process.env;
 
-const tokenRouter = require('./routers/token.router');
+const tokensRouter = require('./routers/token.router');
+const authRouter = require('./routers/auth.router');
 
 const corsConfig = {
   origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
@@ -20,8 +21,9 @@ app.use(morgan('dev'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-// app.use('/auth', authRouter);
-app.use('/token', tokenRouter);
+app.use('/api/tokens', tokensRouter);
+app.use('/api/auth', authRouter);
 
-app.listen(PORT, () => {  console.log(`Server started at ${PORT} port`);
+app.listen(PORT, () => {
+  console.log(`Server started at ${PORT} port`);
 });

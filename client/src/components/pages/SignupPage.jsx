@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Button, Form, Container, Row, Col } from 'react-bootstrap';
 import './SignupPage.css';
 
-export default function SignupPage() {
+export default function SignupPage({ signupHandler }) {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -15,10 +15,10 @@ export default function SignupPage() {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const signupHandler = (e) => {
-    e.preventDefault();
-    console.log(formData);
-  };
+//  const signupHandler = (e, formData) => {
+//     e.preventDefault();
+//     console.log(formData);
+//   };
 
   return (
     <>
@@ -86,6 +86,7 @@ export default function SignupPage() {
               Зарегистрироваться
             </Button>
           </Form>
+          <br />
         </Col>
       </Row>
     </Container>
