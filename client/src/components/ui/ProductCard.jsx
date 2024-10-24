@@ -14,10 +14,10 @@ export default function ProductCard({ product, onDelete, user }) {
           </div>
         )}
         <br />
-        <Card.Text >Описание: {product.description}</Card.Text>
-        <Card.Text>Цена: {product.price} руб.</Card.Text>
-        <Card.Text>Категория: {product.Category.name}</Card.Text>
-        <Card.Text>На складе: {product.stock} шт.</Card.Text>
+        <Card.Text style={{ textShadow: 'none' }}>Описание: {product.description}</Card.Text>
+        <Card.Text style={{ textShadow: 'none' }}>Цена: {product.price} руб.</Card.Text>
+        <Card.Text style={{ textShadow: 'none' }}>Категория: {product.Category.name}</Card.Text>
+        <Card.Text style={{ textShadow: 'none' }}>На складе: {product.stock} шт.</Card.Text>
 
         
 
