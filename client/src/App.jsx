@@ -7,6 +7,8 @@ import SignupPage from './components/pages/SignupPage';
 import axiosInstance, { setAccessToken } from './services/axiosInstance';
 import ProtectedRoute from "./components/HOC/ProtectedRoute";
 import LoginPage from './components/pages/LoginPage';
+import ProductsPage from './components/pages/ProductsPage';
+import OneProductPage from './components/pages/OneProductPage';
 
 function App() {
   const [user, setUser] = useState();
@@ -74,6 +76,14 @@ function App() {
         {
           path: '/',
           element: <MainPage />,
+        },
+        {
+          path: '/catalog',
+          element: <ProductsPage user={user} />,
+        },
+        {
+          path: '/products/:productId',
+          element: <OneProductPage user={user} />,
         },
         {
           element: <ProtectedRoute isAllowed={user === null} />,
